@@ -33,6 +33,7 @@ const App=()=>{
       getTodos();
     }).catch(err=>{
       console.log(err);
+      setLoading(false);
     })
     setInputValue('')
   }
