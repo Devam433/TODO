@@ -1,6 +1,5 @@
 import fs from 'fs';
 
-
 const getAllTodosUtil = ()=>{
   const allTodos = fs.readFileSync('./Data/todos.json',"utf-8")
   console.log(allTodos);
@@ -15,29 +14,13 @@ const saveTodos = (todos)=>{
   }
 }
 
-
-//@desc get all todos
-//@route GET api/todos
-//@access public
-// export const getAllTodos = (req,res)=>{
-//   const allTodos = fs.readFileSync('./Data/todos.json',"utf-8") 
-//   const data = JSON.parse(allTodos)
-//   console.log("data",data)
-//   res.status(200).json({message:"All Todos",data:data});
-// }
-
+// get all todos
+// GET api/todos
 export const getAllTodos = (req, res) => {
   try {
     // Read the file
     const allTodos = fs.readFileSync('./Data/todos.json', 'utf-8');
-    
-    // Log the raw file content to debug
-    console.log("Raw file content:", allTodos);
-    
-    // Parse the JSON content
     const data = JSON.parse(allTodos);
-    console.log("Parsed data:", data);
-    
     // Send the response
     res.status(200).json({ message: "All Todos", data: data });
   } catch (error) {
@@ -46,9 +29,8 @@ export const getAllTodos = (req, res) => {
   }
 };
 
-//@desc add(create) a todo
-//@route CREATE api/todos/id
-//@access public
+// add(create) a todo
+// CREATE api/todos/id
 export const createTodo = (req,res)=>{
   console.log(req.body)
   const {title,isCompleted} = req.body;
@@ -70,28 +52,24 @@ export const createTodo = (req,res)=>{
     res.status(500)
     throw Error('Unexpected Error')
   }
-
   res.status(201).json({message:`Todo Created`,data:data});
 }
 
-//@desc update a todo
-//@route PUT api/todos/id
-//@access public
+// update a todo
+// PUT api/todos/id
 export const updateTodo = (req,res)=>{
   const {id} = req.body;
   if(!id || typeof id!=='number') {
     res.status(400)
     throw error('id invalid')
   }
-
   const allTodos = getAllTodosUtil();
 
   res.status(200).json({meaage:`Update Todo id ${req.params.id}`});
 }
 
-//@desc delete a todo
-//@route DETELE api/todos/id
-//@access public
+// delete a todo
+// DETELE api/todos/id
 export const deleteTodo = (req,res)=>{
   const id = req.params.id;
   console.log('del todo id',id);
@@ -101,14 +79,12 @@ export const deleteTodo = (req,res)=>{
   }
 
   const allTodos = getAllTodosUtil();
-console.log('del todo all todo', allTodos)
   const newAllTodos = allTodos.filter(todo=>{
     if(todo.id!=id){
-      console.log(todo)
       return todo;
     }
   })
   saveTodos(newAllTodos);
-console.log('new all todos',newAllTodos)
+  
   res.status(200).json({meaage:`Delete Todo id ${req.params.id}`, data:newAllTodos});
 }
